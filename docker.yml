@@ -1,0 +1,9 @@
+- name: install docker for minio-others
+  hosts: minio_others
+  roles:
+    - docker
+
+- name: install docker-compose for minio-others
+  hosts: minio_others
+  roles:
+    - docker-compose
