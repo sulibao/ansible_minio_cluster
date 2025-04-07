@@ -185,7 +185,7 @@ function run_ansible() {
 
 function  create_ssh_key(){
   echo -e "Creating sshkey."
-  docker exec -i ansible_sulibao /bin/sh -c 'echo -e "y\n"|ssh-keygen -t rsa -N "" -C "deploy@ansible_redis_sentinel" -f ~/.ssh/id_rsa_ansible_redis -q'
+  docker exec -i ansible_sulibao /bin/sh -c 'echo -e "y\n"|ssh-keygen -t rsa -N "" -C "deploy@ansible_minio" -f ~/.ssh/id_rsa_ansible_minio -q'
   echo -e "\nCreated sshkey."
 
 }
@@ -202,6 +202,12 @@ function install_docker_slave() {
   echo -e "\nInstalled docker for other nodes."
 }
 
+function install_minio() {
+  echo -e "Install minio."
+  docker exec -i ansible_sulibao /bin/sh -c "cd $path && ansible-playbook  ./minio.yml"
+  echo -e "\nInstalled minio."
+}
+
 get_arch_package
 check_docker
 check_docker_compose
@@ -210,3 +216,4 @@ ensure_ansible
 create_ssh_key
 copy_ssh_key
 install_docker_slave
+install_minio
