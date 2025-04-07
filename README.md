@@ -1,30 +1,30 @@
 # ansible_minio_cluster
 
-此文档用于指示如何使用ansible+docker+docker-compose快速部署4个副本的minio高可用集群。
+This document is used to indicate how to quickly deploy a minio high availability cluster with 4 replicas using ansible+docker+docker-compose.
 
-# 示例服务器列表
+# Example server list
 
 https://i-blog.csdnimg.cn/direct/565b4753942c4cbd98bdd29f0cdcae1b.png
 
-# 安装前
+# Before installation
 
-## 修改变量文件group_vars/all.yml
+## Modify the variable file group_vars/all.yml
 
 ```
-docker_data_dir: /app/docker_data   #docker数据存储目录
-minio_data: /app/minio_data    #minio数据存储目录
-minio_port: 9000              #minio页面端口
-minio_console_port: 9001      #minio-console端口
+docker_data_dir: /app/docker_data   #docker data storage directory
+minio_data: /app/minio_data    #minio data storage directory
+minio_port: 9000              #minio page port
+minio_console_port: 9001      #minio-console port
 image_minio: "registry.cn-chengdu.aliyuncs.com/su03/minio:RELEASE.2024-05-28T17-19-04Z"
-# minio镜像
+# minio image
 minio_ak: "admin"    #minio-ak
 minio_sk: "admin@2025"   #minio-sk
 ```
 
-## 修改ansible主机清单
+## Modify the ansible host manifest
 
 ```
-[minio01]  #以下分别填写用于部署minio的4个节点IP地址
+[minio01]  #The following are the IP addresses of the four nodes used to deploy minio
 192.168.2.190
 [minio_others01]
 192.168.2.191
@@ -34,32 +34,32 @@ minio_sk: "admin@2025"   #minio-sk
 192.168.2.193
 ```
 
-## 修改setup.sh安装脚本
+## Modify the setup.sh installation script
 
 ```
 vim setup.sh
-export ssh_pass="sulibao"     #此项应为服务器root用户密码
+export ssh_pass="sulibao"     #This should be the server root user password
 ```
 
-# 用法演示
+# Installation
 
 ```
 bash setup.sh
 ```
 
-# 安装后验证
+# Post-installation verification
 
-- 命令行验证
+- Command-line validation
 
 ```sh
-docker exec -it minio_data-minio-1 bash   #进入任意一个节点任意一个minio容器
-bash-5.1# mc alias set mycluster http://test1:9000 admin admin@2025   #为任意一个节点设置别名
+docker exec -it minio_data-minio-1 bash   #Go to any node, any minio container
+bash-5.1# mc alias set mycluster http://test1:9000 admin admin@2025   #Set an alias for any node
 mc: Configuration written to `/tmp/.mc/config.json`. Please update your access credentials.
 mc: Successfully created `/tmp/.mc/share`.
 mc: Initialized share uploads `/tmp/.mc/share/uploads.json` file.
 mc: Initialized share downloads `/tmp/.mc/share/downloads.json` file.
 Added `mycluster` successfully. 
-bash-5.1# mc admin info mycluster    #查看集群状态，以下为正常4副本online状态
+bash-5.1# mc admin info mycluster    #Check the cluster status, the following is the normal 4 replica online status
 ●  test1:9000
    Uptime: 16 minutes 
    Version: 2024-05-28T17:19:04Z
@@ -97,7 +97,7 @@ bash-5.1# mc admin info mycluster    #查看集群状态，以下为正常4副�
 
 ```
 
-- 页面上传文件验证数据目录是否同步
+- The page upload file verifies that the data directory is synchronized（Access method: http:// Any node IP:9000）
 
 https://i-blog.csdnimg.cn/direct/3c026d9fc972413896c1805fd9f5329c.png
 
