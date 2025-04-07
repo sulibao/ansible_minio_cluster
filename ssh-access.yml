@@ -1,4 +1,4 @@
-- hosts: redis
+- hosts: minio
   tasks:
   - name: known_hosts file is created if it does not exist
     shell:

@@ -1,4 +1,4 @@
-- name: ensure dir for redis
+- name: ensure dir for minio
   file:
     path: "{{ minio_data }}"
     state: directory
